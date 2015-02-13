@@ -269,7 +269,13 @@ if (!is.null(opt$design)) {
 # default
 is_stats_design <- FALSE
 if ((!is.null(opt$stats)) && (!is.null(opt$design))) {
-		is_stats_design <- isStatsDesign(stats.df, design.df)
+  stats_design_warn_err <- tryCatch.W.E(isStatsDesign(stats.df, design.df))
+  if (is.null(stats_design_warn_err$warning) && is.null(stats_design_warn_err$value$message)) {
+	  is_stats_design <- stats_design_warn_err$value
+  } else
+	{
+		stop(paste(geterrmessage(), str(stats_design_warn_err)))
+	}
 }
 
 
