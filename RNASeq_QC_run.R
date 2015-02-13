@@ -23,21 +23,12 @@ copyright <- "Copyright (c) 2015 by Joseph Tran. This work is made available und
 ## execution time: start
 T1<-Sys.time()
 
-##
-## Load and install libraries
-##
-
-### RNASeq_QC_lib.R
-#initial.options <- commandArgs(trailingOnly = FALSE)
-#file.arg.name <- "--file="
-#script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
-#script.dir <- dirname(script.name)
-#source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
-library(qc4rnaseq)
 
 ##
 ## Options and usage
 ##
+library(optparse)
+
 option_list <- list(
   make_option(c('-v', '--verbosity-level'), type = "integer", dest = "verbosity", default = 1, help = "Verbosity threshold (5=DEBUG, 4=INFO 3=WARN, 2=ERROR, 1=FATAL)"),
   make_option(c("-c", "--count"), type="character", help="The count dataset input file: 2 formats are accepted, BBRIC or generic (see notes) [mandatory]", metavar="count_input_file"),
@@ -84,6 +75,18 @@ if (opt$help) {
             sep=""))
   quit()
 }
+
+##
+## Load and install libraries
+##
+
+### RNASeq_QC_lib.R
+#initial.options <- commandArgs(trailingOnly = FALSE)
+#file.arg.name <- "--file="
+#script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
+#script.dir <- dirname(script.name)
+#source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
+library(qc4rnaseq)
 
 ##
 ## Logger
