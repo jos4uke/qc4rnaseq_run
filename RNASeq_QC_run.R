@@ -251,12 +251,15 @@ if (!is.null(opt$design)) {
 # default
 is_count_design <- FALSE  
 if (!is.null(opt$design)) {
-	if (is_bbric_format) {
-		is_count_design <- isCountDesign(count.df, design.df, format="BBRIC")
+	if (is_bbric_format || is_generic_format) {
+    count_design_warn_err <- tryCatch.W.E(isCountDesign(count.df, design.df, format=opt$format))
+    if (is.null(count_design_warn_err$warning) && is.null(count_design_warn_err$value$message)) {
+	    is_count_design <- count_design_warn_err$value
+    } else
+	  {
+		  stop(paste(geterrmessage(), str(count_design_warn_err)))
+	  }
 	
-	} else if (is_generic_format) {
-		is_count_design <- isCountDesign(count.df, design.df, format="generic")
-  
 	}
 }
 
