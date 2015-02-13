@@ -213,7 +213,7 @@ if (!is.null(opt$stats)) {
 	info(logger, paste("Loading stats data, ", opt$stats, ", ...", sep=""))
 	stats.df <- loadStatsData(opt$stats)
 	info(logger, paste("Loading stats data, ", opt$stats, " done", sep=""))
-
+	debug(logger, paste("input stats data dimensions: ", dim(stats.df)[1], " x ", dim(stats.df)[2], sep=""))
 	### check stats format
 	is_stats_format <- isStatsDataFormat(stats.df)
 }
