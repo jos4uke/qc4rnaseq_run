@@ -41,6 +41,7 @@ source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
 option_list <- list(
   make_option(c('-v', '--verbosity-level'), type = "integer", dest = "verbosity", default = 1, help = "Verbosity threshold (5=DEBUG, 4=INFO 3=WARN, 2=ERROR, 1=FATAL)"),
   make_option(c("-c", "--count"), type="character", help="The count dataset input file: 2 formats are accepted, BBRIC or generic (see notes) [mandatory]", metavar="count_input_file"),
+   make_option(c("-f", "--format"), type="character", default = "BBRIC", help="The count dataset input file format: 2 values are accepted, BBRIC or generic (see notes) [mandatory]", metavar="count_input_file_format"),
   make_option(c("-s", "--stats"), type="character", help="The BBRIC mapping statistics dataset input file", metavar="stats_input_file"),
   make_option(c("-d", "--design"), type="character", help="The experimental design input file describing the different factors and modalities in the data (see notes)", metavar="design_input_file"),
   make_option(c("-o", "--outdir"), type="character", default="rnaseq_qc_out", help="The output directory [default %default]", metavar="OUTPUT_DIRECTORY")
@@ -103,6 +104,19 @@ if (!file.exists(opt$count) || (file.access(opt$count, mode=4) == -1)) {
 {
   debug(logger, paste("OK Count input file", opt$count, " does exist and is readable", sep=""))
 }
+
+###
+### Check for count data input file format
+###
+formats <- c("BBRIC", "generic")
+if (!(opt$format %in% formats)) {
+  error(logger, paste("Count input file format", opt$format, " is not a valid value.", sep=""))
+  stop(sprintf("Specified count file format ( %s ) is not valid.", opt$format))      
+} else
+{
+  debug(logger, paste("OK Count input file format", opt$format, " is valid.", sep=""))
+}
+
 
 ###
 ### Check for stats data input file
