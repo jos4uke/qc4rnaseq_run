@@ -28,12 +28,12 @@ T1<-Sys.time()
 ##
 
 ### RNASeq_QC_lib.R
-initial.options <- commandArgs(trailingOnly = FALSE)
-file.arg.name <- "--file="
-script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
-script.dir <- dirname(script.name)
-source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
-
+#initial.options <- commandArgs(trailingOnly = FALSE)
+#file.arg.name <- "--file="
+#script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
+#script.dir <- dirname(script.name)
+#source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
+library(qc4rnaseq)
 
 ##
 ## Options and usage
