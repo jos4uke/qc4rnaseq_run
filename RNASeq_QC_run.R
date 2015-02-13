@@ -27,7 +27,15 @@ T1<-Sys.time()
 ##
 ## Options and usage
 ##
-library(optparse)
+### optparse
+if (is.element('optparse', installed.packages()[,1]))
+{
+  suppressPackageStartupMessages(require('optparse'));
+} else
+{
+  install.packages('optparse');
+  suppressPackageStartupMessages(library('optparse'));
+}
 
 option_list <- list(
   make_option(c('-v', '--verbosity-level'), type = "integer", dest = "verbosity", default = 1, help = "Verbosity threshold (5=DEBUG, 4=INFO 3=WARN, 2=ERROR, 1=FATAL)"),
