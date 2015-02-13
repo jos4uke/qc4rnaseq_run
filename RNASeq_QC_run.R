@@ -207,7 +207,7 @@ if (is_count_format && opt$format == "BBRIC") {
 ## Check stats data format(optional)
 ##
 # default
-is_stats_format <- TRUE
+is_stats_format <- FALSE 
 if (!is.null(opt$stats)) {
 	### load stats data 
 	info(logger, paste("Loading stats data, ", opt$stats, ", ...", sep=""))
@@ -215,7 +215,13 @@ if (!is.null(opt$stats)) {
 	info(logger, paste("Loading stats data, ", opt$stats, " done", sep=""))
 	debug(logger, paste("input stats data dimensions: ", dim(stats.df)[1], " x ", dim(stats.df)[2], sep=""))
 	### check stats format
-	is_stats_format <- isStatsDataFormat(stats.df)
+  stats_warn_err <- tryCatch.W.E(isStatsDataFormat(stats.df))
+  if (is.null(stats_warn_err$warning) && is.null(stats_warn_err$value$message)) {
+	  is_stats_format <- stats_warn_err$value
+  } else
+	{
+		stop(paste(geterrmessage(), str(stats_warn_err)))
+	}
 }
 
 ##
