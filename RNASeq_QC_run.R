@@ -252,7 +252,7 @@ if (!is.null(opt$design)) {
 ## Check stats data and design data consistency (optional)
 ##
 # default
-is_stats_design <- TRUE
+is_stats_design <- FALSE
 if ((!is.null(opt$stats)) && (!is.null(opt$design))) {
 		is_stats_design <- isStatsDesign(stats.df, design.df)
 }
