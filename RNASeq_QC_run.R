@@ -236,7 +236,13 @@ if (!is.null(opt$design)) {
 	info(logger, paste("Loading design data, ", opt$design, " done", sep=""))
 	debug(logger, paste("input design data dimensions: ", dim(design.df)[1], " x ", dim(design.df)[2], sep=""))
 	### check design format
-	is_design_format <- isDesignDataFormat(design.df)
+  design_warn_err <- tryCatch.W.E(isDesignDataFormat(design.df))
+  if (is.null(design_warn_err$warning) && is.null(design_warn_err$value$message)) {
+	  is_design_format <- design_warn_err$value
+  } else
+	{
+		stop(paste(geterrmessage(), str(design_warn_err)))
+	}
 }
 
 ##
