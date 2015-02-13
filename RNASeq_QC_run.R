@@ -222,13 +222,13 @@ if (!is.null(opt$stats)) {
 ## Check design data format (optional)
 ##
 # default
-is_design_format <- TRUE
+is_design_format <- FALSE
 if (!is.null(opt$design)) {
 	### load design data
 	info(logger, paste("Loading design data, ", opt$design, ", ...", sep=""))
 	design.df <- loadDesignData(opt$design)
 	info(logger, paste("Loading design data, ", opt$design, " done", sep=""))
-
+	debug(logger, paste("input design data dimensions: ", dim(design.df)[1], " x ", dim(design.df)[2], sep=""))
 	### check design format
 	is_design_format <- isDesignDataFormat(design.df)
 }
