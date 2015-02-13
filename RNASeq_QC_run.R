@@ -237,7 +237,7 @@ if (!is.null(opt$design)) {
 ## Check count data and design data consistency (optional)
 ##
 # default
-is_count_design <- TRUE
+is_count_design <- FALSE  
 if (!is.null(opt$design)) {
 	if (is_bbric_format) {
 		is_count_design <- isCountDesign(count.df, design.df, format="BBRIC")
