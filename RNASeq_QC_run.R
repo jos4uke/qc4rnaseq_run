@@ -169,26 +169,30 @@ if (!file.exists(opt$outdir)){
 info(logger, paste("Loading count data, ", opt$count, ", ...", sep=""))
 count.df <- loadCountData(opt$count)
 info(logger, paste("Loading count data, ", opt$count, " done", sep=""))
+debug(logger, paste("input count data dimensions: ", dim(count.df)[1], " x ", dim(count.df)[2], sep=""))
 
 ### check count format
 # defaults
-is_bbric_format = FALSE
-is_generic_format = FALSE
-is_bbric_format <- isCountDataFormat(count.df, format="BBRIC")
-if (is_bbric_format == FALSE)
-{
-  is_generic_format <- isCountDataFormat(count.df, format="generic")
-}
+is_count_format = FALSE
+warn_err <- tryCatch.W.E(isCountDataFormat(count.df, format=opt$format))
+if (is.null(warn_err$warning) && is.null(warn_err$value$message)) {
+	is_count_format <- warn_err$value
+} else
+	{
+		stop(paste(geterrmessage(), str(warn_err)))
+	}
 
 
 # set count data frames
-if (is_bbric_format) {
+if (is_count_format && opt$format == "BBRIC") {
   # if bbric
+  info(logger, "Set bbric count variable")
   bbric_count_data_file <- opt$count
   bbric_count <- count.df
   
-} else if (is_generic_format) {
+} else if (is_count_format && opt$format == "generic") {
   # if generic
+  info(logger, "Set generic count variable")
   generic_count_data_file <- opt$count
   generic_count <- count.df
   
