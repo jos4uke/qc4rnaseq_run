@@ -37,6 +37,10 @@ if (is.element('optparse', installed.packages()[,1]))
   suppressPackageStartupMessages(library('optparse'));
 }
 
+
+
+
+
 option_list <- list(
   make_option(c('-v', '--verbosity-level'), type = "integer", dest = "verbosity", default = 1, help = "Verbosity threshold (5=DEBUG, 4=INFO 3=WARN, 2=ERROR, 1=FATAL)"),
   make_option(c("-c", "--count"), type="character", help="The count dataset input file: 2 formats are accepted, BBRIC or generic (see notes) [mandatory]", metavar="count_input_file"),
@@ -96,8 +100,6 @@ if (opt$help) {
 #source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
 suppressPackageStartupMessages(library(qc4rnaseq))
 suppressPackageStartupMessages(library(log4r))
-suppressPackageStartupMessages(library(getopt))
-suppressPackageStartupMessages(library(optparse))
 suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(markdown))
 suppressPackageStartupMessages(library(rmarkdown))
@@ -201,7 +203,7 @@ if (is.null(warn_err$warning)) {
 	is_count_format <- warn_err$value
 } else
 	{
-		stop(paste(geterrmessage(), str(warn_err$warning$message)))
+		stop(paste(geterrmessage(), warn_err$warning$message))
 	}
 
 
@@ -242,7 +244,7 @@ if (!is.null(opt$stats)) {
 	  is_stats_format <- stats_warn_err$value
   } else
 	{
-		stop(paste(geterrmessage(), str(stats_warn_err$warning$message)))
+		stop(paste(geterrmessage(), stats_warn_err$warning$message))
 	}
 }
 
@@ -263,7 +265,7 @@ if (!is.null(opt$design)) {
 	  is_design_format <- design_warn_err$value
   } else
 	{
-		stop(paste(geterrmessage(), str(design_warn_err$warning$message)))
+		stop(paste(geterrmessage(), design_warn_err$warning$message))
 	}
 }
 
@@ -279,7 +281,7 @@ if (!is.null(opt$design)) {
 	    is_count_design <- count_design_warn_err$value
     } else
 	  {
-		  stop(paste(geterrmessage(), str(count_design_warn_err$warning$message)))
+		  stop(paste(geterrmessage(), count_design_warn_err$warning$message))
 	  }
 	
 	}
@@ -296,7 +298,7 @@ if ((!is.null(opt$stats)) && (!is.null(opt$design))) {
 	  is_stats_design <- stats_design_warn_err$value
   } else
 	{
-		stop(paste(geterrmessage(), str(stats_design_warn_err$warning$message)))
+		stop(paste(geterrmessage(), stats_design_warn_err$warning$message))
 	}
 }
 
