@@ -94,8 +94,12 @@ if (opt$help) {
 #script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
 #script.dir <- dirname(script.name)
 #source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
-library(qc4rnaseq)
-library(log4r)
+suppressPackageStartupMessages(library(qc4rnaseq))
+suppressPackageStartupMessages(library(log4r))
+suppressPackageStartupMessages(library(rmarkdown))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(dendextend))
+suppressPackageStartupMessages(library(FactoMineR))
 
 ##
 ## Logger
