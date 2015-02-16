@@ -196,17 +196,17 @@ if (is.null(warn_err$warning)) {
 
 
 # set count data frames
+is_bbric_format <- FALSE
+is_generic_format <- FALSE
 if (is_count_format && opt$format == "BBRIC") {
   # if bbric
   info(logger, "Set bbric count variable")
-  bbric_count_data_file <- opt$count
-  bbric_count <- count.df
+  is_bbric_format <- TRUE
   
 } else if (is_count_format && opt$format == "generic") {
   # if generic
   info(logger, "Set generic count variable")
-  generic_count_data_file <- opt$count
-  generic_count <- count.df
+  is_generic_format <- TRUE
   
 } else {
   # count format not supported
