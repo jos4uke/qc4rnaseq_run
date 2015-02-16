@@ -95,6 +95,7 @@ if (opt$help) {
 #script.dir <- dirname(script.name)
 #source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
 library(qc4rnaseq)
+library(log4r)
 
 ##
 ## Logger
@@ -186,11 +187,11 @@ debug(logger, paste("input count data dimensions: ", dim(count.df)[1], " x ", di
 # defaults
 is_count_format = FALSE
 warn_err <- tryCatch.W.E(isCountDataFormat(count.df, format=opt$format))
-if (is.null(warn_err$warning) && is.null(warn_err$value$message)) {
+if (is.null(warn_err$warning)) {
 	is_count_format <- warn_err$value
 } else
 	{
-		stop(paste(geterrmessage(), str(warn_err)))
+		stop(paste(geterrmessage(), str(warn_err$warning$message)))
 	}
 
 
@@ -227,11 +228,11 @@ if (!is.null(opt$stats)) {
 	debug(logger, paste("input stats data dimensions: ", dim(stats.df)[1], " x ", dim(stats.df)[2], sep=""))
 	### check stats format
   stats_warn_err <- tryCatch.W.E(isStatsDataFormat(stats.df))
-  if (is.null(stats_warn_err$warning) && is.null(stats_warn_err$value$message)) {
+  if (is.null(stats_warn_err$warning)) {
 	  is_stats_format <- stats_warn_err$value
   } else
 	{
-		stop(paste(geterrmessage(), str(stats_warn_err)))
+		stop(paste(geterrmessage(), str(stats_warn_err$warning$message)))
 	}
 }
 
@@ -248,11 +249,11 @@ if (!is.null(opt$design)) {
 	debug(logger, paste("input design data dimensions: ", dim(design.df)[1], " x ", dim(design.df)[2], sep=""))
 	### check design format
   design_warn_err <- tryCatch.W.E(isDesignDataFormat(design.df))
-  if (is.null(design_warn_err$warning) && is.null(design_warn_err$value$message)) {
+  if (is.null(design_warn_err$warning)) {
 	  is_design_format <- design_warn_err$value
   } else
 	{
-		stop(paste(geterrmessage(), str(design_warn_err)))
+		stop(paste(geterrmessage(), str(design_warn_err$warning$message)))
 	}
 }
 
@@ -264,11 +265,11 @@ is_count_design <- FALSE
 if (!is.null(opt$design)) {
 	if (is_bbric_format || is_generic_format) {
     count_design_warn_err <- tryCatch.W.E(isCountDesign(count.df, design.df, format=opt$format))
-    if (is.null(count_design_warn_err$warning) && is.null(count_design_warn_err$value$message)) {
+    if (is.null(count_design_warn_err$warning)) {
 	    is_count_design <- count_design_warn_err$value
     } else
 	  {
-		  stop(paste(geterrmessage(), str(count_design_warn_err)))
+		  stop(paste(geterrmessage(), str(count_design_warn_err$warning$message)))
 	  }
 	
 	}
@@ -281,11 +282,11 @@ if (!is.null(opt$design)) {
 is_stats_design <- FALSE
 if ((!is.null(opt$stats)) && (!is.null(opt$design))) {
   stats_design_warn_err <- tryCatch.W.E(isStatsDesign(stats.df, design.df))
-  if (is.null(stats_design_warn_err$warning) && is.null(stats_design_warn_err$value$message)) {
+  if (is.null(stats_design_warn_err$warning)) {
 	  is_stats_design <- stats_design_warn_err$value
   } else
 	{
-		stop(paste(geterrmessage(), str(stats_design_warn_err)))
+		stop(paste(geterrmessage(), str(stats_design_warn_err$warning$message)))
 	}
 }
 
@@ -311,7 +312,6 @@ if (all(is_stats_format, is_design_format, is_count_design, is_stats_design)) {
 		render(input=stats_report_path, output_format="pdf_document", output_dir=opt$outdir)
 	}
 } else {
-	# comment fait-on pour afficher le debug logger correspondant ?
 	error(logger, "The stats and/or design format is inappropriate.")
 	stop("The stats and/or design format is inappropriate.")
 }
