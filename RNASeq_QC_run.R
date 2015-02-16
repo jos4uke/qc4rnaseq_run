@@ -219,7 +219,7 @@ if (is_count_format && opt$format == "BBRIC") {
 ## Check stats data format(optional)
 ##
 # default
-is_stats_format <- FALSE 
+is_stats_format <- TRUE
 if (!is.null(opt$stats)) {
 	### load stats data 
 	info(logger, paste("Loading stats data, ", opt$stats, ", ...", sep=""))
@@ -240,7 +240,7 @@ if (!is.null(opt$stats)) {
 ## Check design data format (optional)
 ##
 # default
-is_design_format <- FALSE
+is_design_format <- TRUE
 if (!is.null(opt$design)) {
 	### load design data
 	info(logger, paste("Loading design data, ", opt$design, ", ...", sep=""))
@@ -261,7 +261,7 @@ if (!is.null(opt$design)) {
 ## Check count data and design data consistency (optional)
 ##
 # default
-is_count_design <- FALSE  
+is_count_design <- TRUE 
 if (!is.null(opt$design)) {
 	if (is_bbric_format || is_generic_format) {
     count_design_warn_err <- tryCatch.W.E(isCountDesign(count.df, design.df, format=opt$format))
@@ -279,7 +279,7 @@ if (!is.null(opt$design)) {
 ## Check stats data and design data consistency (optional)
 ##
 # default
-is_stats_design <- FALSE
+is_stats_design <- TRUE
 if ((!is.null(opt$stats)) && (!is.null(opt$design))) {
   stats_design_warn_err <- tryCatch.W.E(isStatsDesign(stats.df, design.df))
   if (is.null(stats_design_warn_err$warning)) {
