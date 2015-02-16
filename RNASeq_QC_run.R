@@ -96,10 +96,16 @@ if (opt$help) {
 #source(normalizePath(file.path(script.dir, "lib/RNASeq_QC_lib.R")), chdir=T)
 suppressPackageStartupMessages(library(qc4rnaseq))
 suppressPackageStartupMessages(library(log4r))
+suppressPackageStartupMessages(library(getopt))
+suppressPackageStartupMessages(library(optparse))
+suppressPackageStartupMessages(library(knitr)
+suppressPackageStartupMessages(library(markdown))
 suppressPackageStartupMessages(library(rmarkdown))
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(dendextend))
 suppressPackageStartupMessages(library(FactoMineR))
+
+
 
 ##
 ## Logger
