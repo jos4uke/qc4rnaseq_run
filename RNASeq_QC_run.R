@@ -314,7 +314,9 @@ if (all(is_stats_format, is_design_format, is_count_design, is_stats_design)) {
 	# BBRIC or generic format
 	if (is_bbric_format){
 		bbric_report_path <- system.file("report", "QC_RNASeq_Count_BBRIC.Rmd", package="qc4rnaseq")
-		render(input=bbric_report_path, output_format="pdf_document", output_dir=opt$outdir)
+		bbric_report_file <- paste(unlist(strsplit(basename(bbric_report_path),".Rmd")), ".pdf", sep="")
+		outdir_abs_path <- normalizePath(opt$outdir)
+		render(input=bbric_report_path, output_format="pdf_document", output_file=bbric_report_file, output_dir=outdir_abs_path, intermediates_dir=outdir_abs_path)
 }	 else if (is_generic_format) {
 		generic_report_path <- system.file("report", "QC_RNASeq_Count_generic.Rmd", package="qc4rnaseq")
 		render(input=generic_report_path, output_format="pdf_document", output_dir=opt$outdir)
