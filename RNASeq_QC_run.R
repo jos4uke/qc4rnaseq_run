@@ -317,14 +317,15 @@ if (all(is_stats_format, is_design_format, is_count_design, is_stats_design)) {
 		bbric_report_path <- system.file("report", "QC_RNASeq_Count_BBRIC.Rmd", package="qc4rnaseq")
 		bbric_report_file <- paste(unlist(strsplit(basename(bbric_report_path),".Rmd")), ".pdf", sep="")
 		render(input=bbric_report_path, output_format="pdf_document", output_file=bbric_report_file, output_dir=outdir_abs_path, intermediates_dir=outdir_abs_path)
-}	 else if (is_generic_format) {
+  }	 else if (is_generic_format) {
 		generic_report_path <- system.file("report", "QC_RNASeq_Count_generic.Rmd", package="qc4rnaseq")
 		generic_report_file <- paste(unlist(strsplit(basename(generic_report_path),".Rmd")), ".pdf", sep="")
 		render(input=generic_report_path, output_format="pdf_document", output_file=generic_report_file, output_dir=outdir_abs_path, intermediates_dir=outdir_abs_path)	
-}
+  }
 	if (!is.null(opt$stats)) {
 		stats_report_path <- system.file("report", "QC_RNASeq_Stats_BBRIC.Rmd", package="qc4rnaseq")
-		render(input=stats_report_path, output_format="pdf_document", output_dir=opt$outdir)
+		stats_report_file <- paste(unlist(strsplit(basename(stats_report_path),".Rmd")), ".pdf", sep="")
+		render(input=stats_report_path, output_format="pdf_document", output_file=stats_report_file, output_dir=outdir_abs_path, intermediates_dir=outdir_abs_path)			
 	}
 } else {
 	error(logger, "The stats and/or design format is inappropriate.")
