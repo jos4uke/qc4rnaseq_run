@@ -126,7 +126,9 @@ if (!file.exists(opt$count) || (file.access(opt$count, mode=4) == -1)) {
   stop(sprintf("Specified count file ( %s ) does not exist or is not readable.", opt$count))      
 } else
 {
-  debug(logger, paste("OK Count input file", opt$count, " does exist and is readable", sep=""))
+  debug(logger, paste("OK Count input file ", opt$count, " does exist and is readable", sep=""))
+  opt$count_dir <- dirname(normalizePath(opt$count))
+  debug(logger, paste("OK Count input file parent directory ", opt$count_dir, sep=""))
 }
 
 ###
@@ -138,7 +140,7 @@ if (!(opt$format %in% formats)) {
   stop(sprintf("Specified count file format ( %s ) is not valid.", opt$format))      
 } else
 {
-  debug(logger, paste("OK Count input file format", opt$format, " is valid.", sep=""))
+  debug(logger, paste("OK Count input file format ", opt$format, " is valid.", sep=""))
 }
 
 
@@ -151,6 +153,8 @@ if (!is.null(opt$stats)) {
   } else
   {
     debug(logger, paste("OK Mapping statistics input file ", opt$stats, " does exist and is readable", sep=""))
+    opt$stats_dir <- dirname(normalizePath(opt$stats))
+    debug(logger, paste("OK Stats input file parent directory ", opt$stats_dir, sep=""))
   }
 }
 
@@ -163,6 +167,8 @@ if (!is.null(opt$design)) {
   } else
   {
     debug(logger, paste("OK Experimental design input file ", opt$design, " does exist and is readable", sep=""))
+    opt$design_dir <- dirname(normalizePath(opt$design))
+    debug(logger, paste("OK Design input file parent directory ", opt$design_dir, sep=""))
   }
 }
 
@@ -314,9 +320,9 @@ if ((!is.null(opt$stats)) && (!is.null(opt$design))) {
 outdir_abs_path <- normalizePath(opt$outdir)
 debug(logger, paste("Output directory absolute path ", outdir_abs_path, sep=""))
 
-intermediates_outdir_abs_path <- paste(outdir_abs_path, "tmp", sep = .Platform$file.sep)
-dir.create(intermediates_outdir_abs_path, showWarnings = TRUE, recursive = FALSE, mode = "0777")
-debug(logger, paste("Intermediates files output directory absolute path ", intermediates_outdir_abs_path, sep=""))
+#intermediates_outdir_abs_path <- paste(outdir_abs_path, "tmp", sep = .Platform$file.sep)
+#dir.create(intermediates_outdir_abs_path, showWarnings = TRUE, recursive = FALSE, mode = "0777")
+#debug(logger, paste("Intermediates files output directory absolute path ", intermediates_outdir_abs_path, sep=""))
 
 # Gather all checks and launch the appropriate.Rmd script
 if (all(is_stats_format, is_design_format, is_count_design, is_stats_design)) {
@@ -324,16 +330,46 @@ if (all(is_stats_format, is_design_format, is_count_design, is_stats_design)) {
 	if (is_bbric_format){
 		bbric_report_path <- system.file("report", "QC_RNASeq_Count_BBRIC.Rmd", package="qc4rnaseq")
 		bbric_report_file <- paste(unlist(strsplit(basename(bbric_report_path),".Rmd")), ".pdf", sep="")
-		suppressMessages(render(input=bbric_report_path, output_format="pdf_document", output_file=bbric_report_file, output_dir=outdir_abs_path, intermediates_dir=intermediates_outdir_abs_path, quiet=TRUE))
+		debug(logger, paste("Report template path: ", bbric_report_path, sep=""))
+		debug(logger, paste("Report output filename: ", bbric_report_file, sep=""))
+		bbric_report_path_copy <- paste(basename(outdir_abs_path), basename(bbric_report_path), sep=.Platform$file.sep)
+		file.copy(bbric_report_path, bbric_report_path_copy)
+		debug(logger, paste("Report template copy path: ", bbric_report_path_copy, sep=""))
+		
+		suppressMessages(render(input=bbric_report_path_copy, output_format="pdf_document", output_file=bbric_report_file, output_dir=outdir_abs_path, quiet=TRUE))
+		
+		if (file.exists(bbric_report_path_copy)) {
+		  file.remove(bbric_report_path_copy)
+		}
   }	 else if (is_generic_format) {
 		generic_report_path <- system.file("report", "QC_RNASeq_Count_generic.Rmd", package="qc4rnaseq")
 		generic_report_file <- paste(unlist(strsplit(basename(generic_report_path),".Rmd")), ".pdf", sep="")
-		suppressMessages(render(input=generic_report_path, output_format="pdf_document", output_file=generic_report_file, output_dir=outdir_abs_path, intermediates_dir=intermediates_outdir_abs_path, quiet=TRUE))
+		debug(logger, paste("Report template path: ", generic_report_path, sep=""))
+		debug(logger, paste("Report output filename: ", generic_report_file, sep=""))
+		generic_report_path_copy <- paste(basename(outdir_abs_path), basename(generic_report_path), sep=.Platform$file.sep)
+		file.copy(generic_report_path, generic_report_path_copy)
+		debug(logger, paste("Report template copy path: ", generic_report_path_copy, sep=""))
+		
+		suppressMessages(render(input=generic_report_path_copy, output_format="pdf_document", output_file=generic_report_file, output_dir=outdir_abs_path, quiet=TRUE))
+
+		if (file.exists(generic_report_path_copy)) {
+		  file.remove(generic_report_path_copy)
+		}
   }
 	if (!is.null(opt$stats)) {
 		stats_report_path <- system.file("report", "QC_RNASeq_Stats_BBRIC.Rmd", package="qc4rnaseq")
 		stats_report_file <- paste(unlist(strsplit(basename(stats_report_path),".Rmd")), ".pdf", sep="")
-		suppressMessages(render(input=stats_report_path, output_format="pdf_document", output_file=stats_report_file, output_dir=outdir_abs_path, intermediates_dir=intermediates_outdir_abs_path, quiet=TRUE))
+		debug(logger, paste("Report template path: ", stats_report_path, sep=""))
+		debug(logger, paste("Report output filename: ", stats_report_file, sep=""))
+		stats_report_path_copy <- paste(basename(outdir_abs_path), basename(stats_report_path), sep=.Platform$file.sep)
+		file.copy(stats_report_path, stats_report_path_copy)
+		debug(logger, paste("Report template copy path: ", stats_report_path_copy, sep=""))
+		
+		suppressMessages(render(input=stats_report_path_copy, output_format="pdf_document", output_file=stats_report_file, output_dir=outdir_abs_path, quiet=TRUE))
+		
+		if (file.exists(stats_report_path_copy)) {
+		  file.remove(stats_report_path_copy)
+		}
 	}
 } else {
 	error(logger, "The stats and/or design format is inappropriate.")
